@@ -21,4 +21,20 @@ jobs:
         with:
           persist-credentials: false
       - name: Test local runner lifecycle and memory guards
-        run: python3 -B -W error::ResourceWarning -m unittest discover -s tools/lean-fast -p test_runner.py
+        run: python3 -B -W error::ResourceWarning -m unittest discover -s tools/lean-fast -p 'test_*.py'
+
+  lean-integration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install pinned Lean toolchain
+        run: |
+          curl --fail --silent --show-error --location https://raw.githubusercontent.com/leanprover/elan/464c9d28395000a2a0128e07081e4956d50eced2/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain none
+          "$HOME/.elan/bin/elan" toolchain install "$(cat lean-toolchain)"
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Compile helpers, export their proofs, and replay in a fresh kernel
+        run: python3 -B tools/lean-fast/integration.py --max-memory-gb 6

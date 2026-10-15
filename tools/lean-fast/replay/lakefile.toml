@@ -1,0 +1,13 @@
+name = "SigGolfReplayProfiler"
+version = "0.1.0"
+defaultTargets = ["replayprof"]
+
+[[require]]
+name = "lean4export"
+git = "https://github.com/leanprover/lean4export"
+rev = "15f6055e299ad5b89345e533cc2192f4cc00f659"
+
+[[lean_exe]]
+name = "replayprof"
+root = "ReplayProf"
+supportInterpreter = true
