@@ -1,0 +1,24 @@
+name: Lean iteration tools
+on:
+  pull_request:
+    paths:
+      - 'tools/lean-fast/**'
+      - '.github/workflows/lean-fast.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/lean-fast/**'
+      - '.github/workflows/lean-fast.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Test local runner lifecycle and memory guards
+        run: python3 -B -W error::ResourceWarning -m unittest discover -s tools/lean-fast -p test_runner.py

@@ -46,6 +46,14 @@ changing Git branches or files. CI evaluates the dispatched checkout; local runs
 include working-tree edits. Failed verification emits no score. The wrapper preserves
 exact integer scores and rejects any value beyond Yukon's safe integer range.
 
+## Local iteration tools in this fork
+
+[The incremental Lean runner](tools/lean-fast/README.md) keeps a separate persistent build
+workspace for faster repeated proof checks across candidates. It includes memory guards,
+a source-bound local certificate audit, and an optional large-literal elaboration helper.
+Start with `python3 tools/lean-fast/check.py --init`. Official Linux verification and
+Yukon submission remain the final checks described above.
+
 ## Workflow and caches
 
 The manual `benchmark.yml` workflow uses `blacksmith-16vcpu-ubuntu-2404` (64 GB RAM).
